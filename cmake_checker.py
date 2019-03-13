@@ -1,8 +1,8 @@
 import argparse
 import sys
 from pathlib import Path
-from verifier import Verifier
-from consolereporter import ConsoleReporter
+from cmake_checker.verifier import Verifier
+from cmake_checker.consolereporter import ConsoleReporter
 
 
 def file_or_dir(path: str) -> Path:

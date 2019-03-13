@@ -9,7 +9,7 @@ class IntegrationTests(TestCase):
     @staticmethod
     def __run_cmake_checker_for_file(path: str) -> str:
         output = subprocess.check_output(['python3',
-                                          'cmakechecker.py',
+                                          'cmake_checker.py',
                                           path])
 
         return output.decode('utf-8')

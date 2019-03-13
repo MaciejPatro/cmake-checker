@@ -1,5 +1,5 @@
 from unittest import TestCase
-from lexer import Lexer
+from cmake_checker.lexer import Lexer
 
 
 class TestLexer(TestCase):
