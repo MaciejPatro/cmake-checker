@@ -1,5 +1,6 @@
 # cmake-checker
 cmake-checker is a tool to search for violations to 'modern' cmake rules.
+
 ###Usage
 
 ```
