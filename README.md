@@ -4,13 +4,14 @@ cmake-checker is a tool to search for violations to 'modern' cmake rules.
 ### Usage
 
 ```
-usage: cmake_checker.py [-h] PATH [PATH ...]
+usage: cmake_checker.py [-h] [--warn-only] PATH [PATH ...]
 
 positional arguments:
-  PATH        Path to the file or directory where the checks should be done
+  PATH         Path to the file or directory where the checks should be done
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help   show this help message and exit
+  --warn-only  Program will return 0 even if violations are found
 ```
 
 ### What&Why tool warns about

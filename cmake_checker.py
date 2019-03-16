@@ -19,9 +19,22 @@ def parse_arguments() -> argparse.Namespace:
     arguments_parser.add_argument('PATH',
                                   type=file_or_dir,
                                   nargs='+',
-                                  help='Path to the file or directory where the checks should be done')
-
+                                  help='Path to the file or directory where the checks should be done'
+                                  )
+    arguments_parser.add_argument('--warn-only',
+                                  action='store_true',
+                                  help='Program will return 0 even if violations are found'
+                                  )
     return arguments_parser.parse_args()
+
+
+def compute_exit_code(violations: list, warn_only: bool) -> int:
+    if warn_only is True:
+        return 0
+    for f, v in violations:
+        if len(v) > 0:
+            return -1
+    return 0
 
 
 def main():
@@ -32,7 +45,8 @@ def main():
     reporter = ConsoleReporter(files_with_info)
     report = reporter.generate_report()
     print(report)
-    sys.exit(0)
+
+    sys.exit(compute_exit_code(files_with_info, arguments.warn_only))
 
 
 main()

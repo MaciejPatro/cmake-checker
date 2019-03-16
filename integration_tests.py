@@ -8,7 +8,7 @@ class IntegrationTests(TestCase):
 
     @staticmethod
     def __run_cmake_checker_for_file(*args) -> str:
-        execute_command = ['python3', 'cmake_checker.py', *args]
+        execute_command = ['python3', 'cmake_checker.py', '--warn-only', *args]
         output = subprocess.check_output(execute_command)
 
         return output.decode('utf-8')
@@ -84,3 +84,8 @@ class IntegrationTests(TestCase):
 
         self.assertNumberOfScannedFiles(3, output)
         self.assertCheckerFoundNumberOfIssues(6, output)
+
+    def test_should_raise_exception_when_warn_only_is_disabled_and_violations_are_found(self):
+        execute_command = ['python3', 'cmake_checker.py', 'integration_tests']
+
+        self.assertRaises(subprocess.CalledProcessError, subprocess.check_output, execute_command)
