@@ -1,10 +1,10 @@
 # cmake-checker
 cmake-checker is a tool to search for violations to 'modern' cmake rules.
 
-###Usage
+### Usage
 
 ```
-usage: cmake_checker.py [-h] PATH
+usage: cmake_checker.py [-h] PATH [PATH ...]
 
 positional arguments:
   PATH        Path to the file or directory where the checks should be done

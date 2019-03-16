@@ -7,10 +7,9 @@ class IntegrationTests(TestCase):
         super(IntegrationTests, self).__init__(*args, **kwargs)
 
     @staticmethod
-    def __run_cmake_checker_for_file(path: str) -> str:
-        output = subprocess.check_output(['python3',
-                                          'cmake_checker.py',
-                                          path])
+    def __run_cmake_checker_for_file(*args) -> str:
+        execute_command = ['python3', 'cmake_checker.py', *args]
+        output = subprocess.check_output(execute_command)
 
         return output.decode('utf-8')
 
@@ -76,3 +75,12 @@ class IntegrationTests(TestCase):
 
         self.assertNumberOfScannedFiles(2, output)
         self.assertCheckerFoundNumberOfIssues(3, output)
+
+    def test_should_accept_multiple_paths_or_files_as_arguments(self):
+        output = self.__run_cmake_checker_for_file(
+            'integration_tests/cmake-files-dir/',
+            'integration_tests/multiple_violations_in_single_line/'
+        )
+
+        self.assertNumberOfScannedFiles(3, output)
+        self.assertCheckerFoundNumberOfIssues(6, output)

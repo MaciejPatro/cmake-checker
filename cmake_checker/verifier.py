@@ -6,7 +6,15 @@ class Verifier(object):
     def __init__(self):
         self.lexer = Lexer()
 
-    def check_path(self, path: Path):
+    def check_path(self, paths: list) -> list:
+        files_with_issues = list()
+
+        for path in paths:
+            files_with_issues = files_with_issues + self.__check_path(path)
+
+        return files_with_issues
+
+    def __check_path(self, path: Path) -> list:
         if not path.is_dir():
             return [(path, self.__validate_file(path))]
 

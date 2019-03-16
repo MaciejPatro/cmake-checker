@@ -18,6 +18,7 @@ def parse_arguments() -> argparse.Namespace:
 
     arguments_parser.add_argument('PATH',
                                   type=file_or_dir,
+                                  nargs='+',
                                   help='Path to the file or directory where the checks should be done')
 
     return arguments_parser.parse_args()

@@ -34,7 +34,7 @@ class ConsoleReporter(object):
             self.current_parsing_line = 0
 
             if violations:
-                output = output + "\nFILE::::::::::" + str(file) + '\n'
+                output = output + "\n>>>" + str(file) + '<<<\n'
 
             for (violation_type, line_number) in violations:
                 self.violations = self.violations + 1
@@ -48,4 +48,4 @@ class ConsoleReporter(object):
             self.current_violation_line = file.readline()
 
     def __generate_new_violation(self, line_number: int, violation_type: str):
-        return "line: %d, %s:: %s" % (line_number, violation_type, self.current_violation_line)
+        return "line: %4s %20s> %s" % (line_number, violation_type, self.current_violation_line)
