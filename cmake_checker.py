@@ -25,6 +25,12 @@ def parse_arguments() -> argparse.Namespace:
                                   action='store_true',
                                   help='Program will return 0 even if violations are found'
                                   )
+    arguments_parser.add_argument('-o',
+                                  '--output-file',
+                                  type=argparse.FileType('w'),
+                                  default=sys.stdout,
+                                  help='Output results to file with given name'
+                                  )
     return arguments_parser.parse_args()
 
 
@@ -43,7 +49,7 @@ def main():
     files_with_info = verify.check_path(arguments.PATH)
     reporter = ConsoleReporter(files_with_info)
     report = reporter.generate_report()
-    print(report)
+    arguments.output_file.write(report)
 
     sys.exit(compute_exit_code(files_with_info, arguments.warn_only))
 

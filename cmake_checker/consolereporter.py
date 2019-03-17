@@ -20,9 +20,9 @@ class ConsoleReporter(object):
 
     def __create_summary(self) -> str:
         if self.violations == 0:
-            return "Scanned %d file(s). Found no issues." % self.files_number
+            return "Scanned %d file(s). Found no issues.\n" % self.files_number
         else:
-            return "Scanned %d file(s). Found %d issues." % (self.files_number, self.violations)
+            return "Scanned %d file(s). Found %d issues.\n" % (self.files_number, self.violations)
 
     def __generate_file_violations(self, file: Path, violations: list) -> str:
         output = ""
