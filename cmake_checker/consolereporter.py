@@ -12,11 +12,8 @@ class ConsoleReporter(object):
 
     def generate_report(self) -> str:
         output = ""
-
-        if self.files_number > 0:
-            for file_with_info in self.files_with_info:
-                file, violations = file_with_info
-                output = output + self.__generate_file_violations(file, violations)
+        for file, violations in self.files_with_info:
+            output = output + self.__generate_file_violations(file, violations)
 
         output = output + '\n' + self.__create_summary()
         return output
