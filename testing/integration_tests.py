@@ -8,7 +8,7 @@ class IntegrationTests(TestCase):
 
     @staticmethod
     def __run_cmake_checker_for_file(*args) -> str:
-        execute_command = ['python3', 'cmake_checker.py', '--warn-only', *args]
+        execute_command = ['python3', '../cmake_checker.py', '--warn-only', *args]
         output = subprocess.check_output(execute_command)
 
         return output.decode('utf-8')
