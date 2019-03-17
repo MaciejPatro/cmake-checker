@@ -31,9 +31,8 @@ def parse_arguments() -> argparse.Namespace:
 def compute_exit_code(violations: list, warn_only: bool) -> int:
     if warn_only is True:
         return 0
-    for f, v in violations:
-        if len(v) > 0:
-            return -1
+    if any(len(v) for f, v in violations):
+        return -1
     return 0
 
 

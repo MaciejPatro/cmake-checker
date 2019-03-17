@@ -129,9 +129,10 @@ class TestLexer(TestCase):
             """
             function(my_func ARG1)
                 set(SOME_VAR PARENT_SCOPE)
+            # endfunction(my_func) should be ignored
             endfunction(my_func)
             """)
 
         self.assertEqual(1, len(tokens_found))
         self.assertEqual('ENDFUNCTION', tokens_found[0].type)
-        self.assertEqual(4, tokens_found[0].lineno)
+        self.assertEqual(5, tokens_found[0].lineno)

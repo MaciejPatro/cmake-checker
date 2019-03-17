@@ -48,7 +48,7 @@ optional arguments:
     * `ENV`
     * `CACHE`
 * `../..` in `target_sources` function
-* setting/unsetting `PARENT_SCOPE` outside of function declaration
+* Set/unset `PARENT_SCOPE` outside of function declaration
 
 ### Possibility to disable check
 If you need to disable for any specific reasons checks you can do it using:
@@ -57,3 +57,6 @@ If you need to disable for any specific reasons checks you can do it using:
 ...
 # cmake-check enable
 ```
+
+### Known issues
+* There is no support for bracket comments.
