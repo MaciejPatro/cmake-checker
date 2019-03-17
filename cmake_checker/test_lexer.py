@@ -58,8 +58,12 @@ class TestLexer(TestCase):
         self.assertEqual(2, token.lineno)
 
     def test_cmake_check_disable_should_force_ignoring_content_until_enabled(self):
-        tokens_found = self.lexer.analyze("add_compile_options( # cmake-check disable\n   include_directories\t( \n "
-                                          "# cmake-check enable \n include_directories(")
+        tokens_found = self.lexer.analyze(
+            """add_compile_options( 
+               # cmake-check disable
+               include_directories\t(  # cmake-check enable 
+                    include_directories(
+            """)
 
         self.assertEqual(2, len(tokens_found))
 
@@ -96,8 +100,38 @@ class TestLexer(TestCase):
         self.assertEqual('CACHE_IN_SET', tokens_found[0].type)
 
     def test_should_raise_violaton_for_target_sources_when_using_parent_dir(self):
-        tokens_found = self.lexer.analyze("  \ttarget_sources( \n# ignored ../.. \n ../../dwoadnoew)\n ../..")
+        tokens_found = self.lexer.analyze(
+            """  \ttarget_sources( 
+            # ignored ../.. 
+            ../../dwoadnoew)
+            ../..
+            """)
 
         self.assertEqual(1, len(tokens_found))
         self.assertEqual('PARENT_DIR_ACCESS', tokens_found[0].type)
         self.assertEqual(3, tokens_found[0].lineno)
+
+    def test_should_raise_issue_for_parent_scope_outside_function_declarations(self):
+        tokens_found = self.lexer.analyze(
+            """
+            function(my_func ARG1)
+                set(SOME_VAR PARENT_SCOPE)
+            endfunction()
+            set(OTHER_VAR PARENT_SCOPE)
+            """)
+
+        self.assertEqual(1, len(tokens_found))
+        self.assertEqual('PARENT_SCOPE', tokens_found[0].type)
+        self.assertEqual(5, tokens_found[0].lineno)
+
+    def test_should_correctly_raise_issues_in_endfunction(self):
+        tokens_found = self.lexer.analyze(
+            """
+            function(my_func ARG1)
+                set(SOME_VAR PARENT_SCOPE)
+            endfunction(my_func)
+            """)
+
+        self.assertEqual(1, len(tokens_found))
+        self.assertEqual('ENDFUNCTION', tokens_found[0].type)
+        self.assertEqual(4, tokens_found[0].lineno)

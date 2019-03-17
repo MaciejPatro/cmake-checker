@@ -4,6 +4,7 @@ import ply.lex as lex
 class Lexer(object):
 
     states = (
+        ('declfunc', 'inclusive'),
         ('targetsources', 'exclusive'),
         ('setfunc', 'exclusive'),
         ('disabled', 'exclusive'),
@@ -21,7 +22,9 @@ class Lexer(object):
               'ADD_COMPILE_DEFINITIONS',
               'MODIFY_ENV_VARIABLE',
               'CACHE_IN_SET',
-              'PARENT_DIR_ACCESS'
+              'PARENT_DIR_ACCESS',
+              'ENDFUNCTION',
+              'PARENT_SCOPE'
               ]
 
     t_FILE_GLOB = r'file[ \t]*\([ \t]*GLOB'
@@ -32,13 +35,14 @@ class Lexer(object):
     t_LINK_DIRECTORIES = r'(^link_directories[ \t]*\()|([ \t]+link_directories[ \t]*\()'
     t_LINK_LIBRARIES = r'(^link_libraries[ \t]*\()|([ \t]+link_libraries[ \t]*\()'
     t_COMPILE_FLAGS = r'(CMAKE_CXX_FLAGS)|(CMAKE_C_FLAGS)'
-    t_CLOSING_COMMAND_WITH_CLAUSE = r'(endif\(.+\))|(endmacro\(.+\))|(endfunction\(.+\))|(endforeach\(.+\))'
+    t_CLOSING_COMMAND_WITH_CLAUSE = r'(endif\(.+\))|(endmacro\(.+\))|(endforeach\(.+\))'
     t_setfunc_MODIFY_ENV_VARIABLE = r'[ \t]*ENV\{'
     t_setfunc_CACHE_IN_SET = r'[ \t]+CACHE'
     t_targetsources_PARENT_DIR_ACCESS = r'\.\.\/\.\.'
 
     def __init__(self):
         self.lexer = lex.lex(module=self)
+        self.is_in_function = False
 
     @staticmethod
     def t_ANY_error(t: lex.Token) -> None:
@@ -48,6 +52,28 @@ class Lexer(object):
     def t_INITIAL_disabled_setfunc_targetsources_newline(t: lex.Token) -> None:
         r"""\n+"""
         t.lexer.lineno += len(t.value)
+
+    def t_begin_declfunc(self, t: lex.Token) -> None:
+        r"""[ \t]*function[ \t]*\("""
+        t.lexer.push_state('declfunc')
+        self.is_in_function = True
+
+    def t_declfunc_ENDFUNCTION(self, t: lex.Token) -> lex.Token:
+        r"""endfunction\(.+\)"""
+        t.lexer.pop_state()
+        self.is_in_function = False
+        return t
+
+    def t_declfunc_end(self, t: lex.Token) -> None:
+        r"""endfunction\([ \t]*\)"""
+        t.lexer.pop_state()
+        self.is_in_function = False
+
+    def t_setfunc_PARENT_SCOPE(self, t: lex.Token):
+        r"""[ \t]+PARENT_SCOPE"""
+        if not self.is_in_function:
+            return t
+        return None
 
     @staticmethod
     def t_begin_targetsources(t: lex.Token) -> None:
@@ -93,6 +119,7 @@ class Lexer(object):
     def analyze(self, data: str) -> list:
         self.lexer.input(data)
         self.lexer.lineno = 1
+        self.is_in_function = False
 
         tokens = []
 
