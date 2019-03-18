@@ -136,3 +136,18 @@ class TestLexer(TestCase):
         self.assertEqual(1, len(tokens_found))
         self.assertEqual('ENDFUNCTION', tokens_found[0].type)
         self.assertEqual(5, tokens_found[0].lineno)
+
+    def test_should_correctly_interpret_bracket_comments(self):
+        tokens_found = self.lexer.analyze(
+            """
+            #[==[
+            file(GLOB
+            incorrect end ]=] file(GLOB
+            ]] ignored
+            endfunction(my)
+            ]==] file(GLOB # this one should be found
+            """)
+
+        self.assertEqual(1, len(tokens_found))
+        self.assertEqual('FILE_GLOB', tokens_found[0].type)
+        self.assertEqual(7, tokens_found[0].lineno)

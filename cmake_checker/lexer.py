@@ -4,6 +4,7 @@ import ply.lex as lex
 class Lexer(object):
 
     states = (
+        ('bracketcomments', 'exclusive'),
         ('declfunc', 'inclusive'),
         ('targetsources', 'exclusive'),
         ('setfunc', 'exclusive'),
@@ -43,15 +44,26 @@ class Lexer(object):
     def __init__(self):
         self.lexer = lex.lex(module=self)
         self.is_in_function = False
+        self.bracket_comment_count = 0
 
     @staticmethod
     def t_ANY_error(t: lex.Token) -> None:
         t.lexer.skip(1)
 
     @staticmethod
-    def t_INITIAL_disabled_setfunc_targetsources_newline(t: lex.Token) -> None:
+    def t_INITIAL_disabled_setfunc_targetsources_bracketcomments_newline(t: lex.Token) -> None:
         r"""\n+"""
         t.lexer.lineno += len(t.value)
+
+    def t_begin_bracketcomments(self, t: lex.Token) -> None:
+        r"""(([^\\]\#)|.{0}\#)(\[=*\[)"""
+        self.bracket_comment_count = t.value.count('=')
+        t.lexer.push_state('bracketcomments')
+
+    def t_bracketcomments_end(self, t: lex.Token) -> None:
+        r"""\]=*\]"""
+        if self.bracket_comment_count is t.value.count('='):
+            t.lexer.pop_state()
 
     def t_begin_declfunc(self, t: lex.Token) -> None:
         r"""[ \t]*function[ \t]*\("""

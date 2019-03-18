@@ -60,6 +60,3 @@ If you need to disable for any specific reasons checks you can do it using:
 ...
 # cmake-check enable
 ```
-
-### Known issues
-* There is no support for bracket comments.
