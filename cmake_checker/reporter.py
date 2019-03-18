@@ -1,8 +1,16 @@
 from pathlib import Path
 
 
-class ConsoleReporter(object):
-    def __init__(self, files_with_info: list) -> object:
+class Reporter(object):
+    @staticmethod
+    def create(reporter_type: str, files_with_info: list):
+        if reporter_type is 'console':
+            return ConsoleReporter(files_with_info)
+        return None
+
+
+class ConsoleReporter(Reporter):
+    def __init__(self, files_with_info: list):
         self.files_number = len(files_with_info)
         self.files_with_info = files_with_info
 

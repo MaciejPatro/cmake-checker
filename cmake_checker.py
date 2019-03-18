@@ -1,8 +1,9 @@
 import argparse
 import sys
 from pathlib import Path
+
 from cmake_checker.verifier import Verifier
-from cmake_checker.consolereporter import ConsoleReporter
+from cmake_checker.reporter import Reporter
 
 
 def file_or_dir(path: str) -> Path:
@@ -31,6 +32,11 @@ def parse_arguments() -> argparse.Namespace:
                                   default=sys.stdout,
                                   help='Output results to file with given name'
                                   )
+    arguments_parser.add_argument('--reporter',
+                                  choices=['console'],
+                                  default='console',
+                                  help='Specify type of reporter to output'
+                                  )
     return arguments_parser.parse_args()
 
 
@@ -47,7 +53,7 @@ def main():
 
     verify = Verifier()
     files_with_info = verify.check_path(arguments.PATH)
-    reporter = ConsoleReporter(files_with_info)
+    reporter = Reporter.create(arguments.reporter, files_with_info)
     report = reporter.generate_report()
     arguments.output_file.write(report)
 
