@@ -1,11 +1,14 @@
 from pathlib import Path
+from junit_xml import TestSuite
 
 
 class Reporter(object):
     @staticmethod
     def create(reporter_type: str, files_with_info: list):
-        if reporter_type is 'console':
+        if reporter_type == 'console':
             return ConsoleReporter(files_with_info)
+        elif reporter_type == 'junit':
+            return JUnitReporter(files_with_info)
         return None
 
 
@@ -54,3 +57,13 @@ class ConsoleReporter(Reporter):
 
     def __generate_new_violation(self, line_number: int, violation_type: str):
         return "line: %4s %20s> %s" % (line_number, violation_type, self.current_violation_line)
+
+
+class JUnitReporter(Reporter):
+    def __init__(self, files_with_info: list):
+        self.files_with_info = files_with_info
+
+    @staticmethod
+    def generate_report() -> str:
+        test_suite = TestSuite('cmake-checker summary', [])
+        return TestSuite.to_xml_string([test_suite], prettyprint=True)

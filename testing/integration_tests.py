@@ -102,3 +102,9 @@ class IntegrationTests(TestCase):
 
         self.assertEqual(command_line_output, output_file.read_text())
         output_file.unlink()
+
+    def test_junit_report_compare_with_golden_master_for_empty_directory(self):
+        output = self.__run_cmake_checker_for_file('integration_tests/empty_dir', '--reporter', 'junit')
+        golden_master = Path('integration_tests/junit_goldenmaster/empty_dir.xml')
+
+        self.assertEqual(golden_master.read_text(), output)

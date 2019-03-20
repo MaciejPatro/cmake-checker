@@ -33,7 +33,7 @@ def parse_arguments() -> argparse.Namespace:
                                   help='Output results to file with given name'
                                   )
     arguments_parser.add_argument('--reporter',
-                                  choices=['console'],
+                                  choices=['console', 'junit'],
                                   default='console',
                                   help='Specify type of reporter to output'
                                   )

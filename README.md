@@ -5,7 +5,7 @@ cmake-checker is a tool to search for violations to 'modern' cmake rules.
 
 ```
 usage: cmake_checker.py [-h] [--warn-only] [-o OUTPUT_FILE]
-                        [--reporter {console}]
+                        [--reporter {console,junit}]
                         PATH [PATH ...]
 
 positional arguments:
@@ -17,7 +17,8 @@ optional arguments:
   --warn-only           Program will return 0 even if violations are found
   -o OUTPUT_FILE, --output-file OUTPUT_FILE
                         Output results to file with given name
-  --reporter {console}  Specify type of reporter to output
+  --reporter {console,junit}
+                        Specify type of reporter to output
 ```
 
 ### What&Why tool warns about
