@@ -62,16 +62,44 @@ class ConsoleReporter(Reporter):
 class JUnitReporter(Reporter):
     def __init__(self, files_with_info: list):
         self.files_with_info = files_with_info
+        self.current_parsing_line = 0
+        self.current_violation_line = ''
 
     def generate_report(self) -> str:
-        test_case_list = []
+        test_suites = []
 
         for file_with_info in self.files_with_info:
-            test_case_list.append(self.__create_test_case_for(file_with_info))
+            test_suites.append(self.__create_test_suite_for(file_with_info))
 
-        test_suite = TestSuite('cmake-checker summary', test_case_list)
-        return TestSuite.to_xml_string([test_suite], prettyprint=True)
+        if not test_suites:
+            test_suites = self.__generate_empty_test_suites()
+
+        return TestSuite.to_xml_string(test_suites, prettyprint=True)
+
+    def __create_test_suite_for(self, file__with_info) -> TestSuite:
+        test_case_list = self.__create_test_cases(file__with_info[0], file__with_info[1])
+        return TestSuite(file__with_info[0], test_case_list)
+
+    def __create_test_cases(self, file: Path, violations: list) -> list:
+        test_cases = []
+
+        with file.open() as cmake_file:
+            self.current_parsing_line = 0
+
+            for (violation_type, line_number) in violations:
+                self.__read_line_with_given_number(cmake_file, line_number)
+                test_case = TestCase(name=violation_type, line=line_number)
+                violation = "line: %4s %20s> %s" % (line_number, violation_type, self.current_violation_line)
+                test_case.add_failure_info(message=violation)
+                test_cases.append(test_case)
+
+        return test_cases
+
+    def __read_line_with_given_number(self, file, line):
+        while self.current_parsing_line != line:
+            self.current_parsing_line = self.current_parsing_line + 1
+            self.current_violation_line = file.readline()
 
     @staticmethod
-    def __create_test_case_for(file__with_info):
-        return TestCase(name=file__with_info[0])
+    def __generate_empty_test_suites() -> list:
+        return [TestSuite('cmake-checker', [TestCase(name='No cmake files found')])]
