@@ -28,7 +28,6 @@ class Reporter(object):
 
 class ConsoleReporter(Reporter):
     def __init__(self, files_with_info: list):
-        self.files_number = len(files_with_info)
         self.files_with_info = files_with_info
         self.violations = 0
 
@@ -40,10 +39,11 @@ class ConsoleReporter(Reporter):
         return output + '\n' + self.__create_summary()
 
     def __create_summary(self) -> str:
+        files_number = len(self.files_with_info)
         if self.violations == 0:
-            return "Scanned %d file(s). Found no issues.\n" % self.files_number
+            return "Scanned %d file(s). Found no issues.\n" % files_number
         else:
-            return "Scanned %d file(s). Found %d issues.\n" % (self.files_number, self.violations)
+            return "Scanned %d file(s). Found %d issues.\n" % (files_number, self.violations)
 
     def __generate_file_output(self, file: Path, violations: list) -> str:
         output = ''
@@ -52,7 +52,6 @@ class ConsoleReporter(Reporter):
                 line_reader = LineReader(cmake_file)
                 output += "\n>>>" + str(file) + '<<<\n'
                 output += self.__generate_file_violations(line_reader, violations)
-
         return output
 
     def __generate_file_violations(self, line_reader: LineReader, violations: list):
@@ -74,10 +73,8 @@ class JUnitReporter(Reporter):
 
     def generate_report(self) -> str:
         test_suites = self.__generate_test_suites()
-
         if not test_suites:
             test_suites = self.__generate_empty_test_suites()
-
         return TestSuite.to_xml_string(test_suites, prettyprint=True)
 
     def __generate_test_suites(self) -> list:
@@ -92,7 +89,6 @@ class JUnitReporter(Reporter):
 
     def __create_test_cases(self, file: Path, violations: list) -> list:
         test_cases = []
-
         with file.open() as cmake_file:
             line_reader = LineReader(cmake_file)
 
@@ -100,7 +96,6 @@ class JUnitReporter(Reporter):
                 test_case = TestCase(name=violation, line=line_number)
                 test_case.add_failure_info(message=self.__generate_failure_info(line_number, violation, line_reader))
                 test_cases.append(test_case)
-
         return test_cases
 
     @staticmethod
