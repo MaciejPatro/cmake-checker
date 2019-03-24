@@ -19,7 +19,7 @@ class IntegrationTests(TestCase):
         self.assertTrue(("Scanned %d file(s)." % number) in data)
 
     def assertCheckerFoundNoIssues(self, data: str) -> None:
-        self.assertTrue("Found no issues." in data)
+        self.assertCheckerFoundNumberOfIssues(0, data)
 
     def assertCheckerFoundNumberOfIssues(self, number: int, data: str) -> None:
         self.assertTrue(("Found %d issues." % number) in data)
