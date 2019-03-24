@@ -15,12 +15,11 @@ def compute_exit_code(violations: list, warn_only: bool) -> int:
 
 def main():
     arguments = parse_arguments()
-
     verify = Verifier()
+
     files_with_info = verify.check_path(arguments.PATH)
     reporter = Reporter.create(arguments.reporter, files_with_info)
-    report = reporter.generate_report()
-    arguments.output_file.write(report)
+    arguments.output_file.write(reporter.generate_report())
 
     sys.exit(compute_exit_code(files_with_info, arguments.warn_only))
 
