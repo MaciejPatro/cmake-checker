@@ -18,10 +18,10 @@ class Verifier(object):
         if not path.is_dir():
             return [(path, self.__validate_file(path))]
 
-        files_with_issues = list()
-        files = self.__find_all_cmake_files(path)
-        for file in files:
+        files_with_issues = []
+        for file in self.__find_all_cmake_files(path):
             files_with_issues.append((file, self.__validate_file(file)))
+
         return files_with_issues
 
     def __validate_file(self, file: Path) -> list:
@@ -30,15 +30,12 @@ class Verifier(object):
 
     def __find_issues(self, data: str) -> list:
         issues = []
-        found_issues = self.lexer.analyze(data)
 
-        for issue in found_issues:
+        for issue in self.lexer.analyze(data):
             issues.append((issue.type, issue.lineno))
 
         return issues
 
     @staticmethod
     def __find_all_cmake_files(path: Path):
-        files_list = sorted(path.glob('**/*.cmake'))
-        files_list = files_list + sorted(path.glob('**/CMakeLists.txt'))
-        return files_list
+        return sorted(path.glob('**/*.cmake')) + sorted(path.glob('**/CMakeLists.txt'))
