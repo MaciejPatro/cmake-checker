@@ -1,5 +1,5 @@
 from pathlib import Path
-from junit_xml import TestSuite
+from junit_xml import TestSuite, TestCase
 
 
 class Reporter(object):
@@ -63,7 +63,15 @@ class JUnitReporter(Reporter):
     def __init__(self, files_with_info: list):
         self.files_with_info = files_with_info
 
-    @staticmethod
-    def generate_report() -> str:
-        test_suite = TestSuite('cmake-checker summary', [])
+    def generate_report(self) -> str:
+        test_case_list = []
+
+        for file_with_info in self.files_with_info:
+            test_case_list.append(self.__create_test_case_for(file_with_info))
+
+        test_suite = TestSuite('cmake-checker summary', test_case_list)
         return TestSuite.to_xml_string([test_suite], prettyprint=True)
+
+    @staticmethod
+    def __create_test_case_for(file__with_info):
+        return TestCase(name=file__with_info[0])

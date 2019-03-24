@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<testsuites disabled="0" errors="0" failures="0" tests="5" time="0.0">
+	<testsuite disabled="0" errors="0" failures="0" name="cmake-checker summary" skipped="0" tests="5" time="0">
+		<testcase name="integration_tests/cmake-files-dir/some_folder/script.cmake"/>
+		<testcase name="integration_tests/cmake-files-dir/CMakeLists.txt"/>
+		<testcase name="integration_tests/dir_with_file_glob_issue/CMakeLists.txt"/>
+		<testcase name="integration_tests/empty_file/CMakeLists.txt"/>
+		<testcase name="integration_tests/multiple_violations_in_single_line/CMakeLists.txt"/>
+	</testsuite>
+</testsuites>
