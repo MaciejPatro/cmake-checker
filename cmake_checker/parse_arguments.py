@@ -23,15 +23,19 @@ def parse_arguments() -> argparse.Namespace:
                                   action='store_true',
                                   help='Program will return 0 even if violations are found'
                                   )
+    arguments_parser.add_argument('--reporter',
+                                  choices=['console', 'junit'],
+                                  default='console',
+                                  help='Specify type of reporter to output'
+                                  )
     arguments_parser.add_argument('-o',
                                   '--output-file',
                                   type=argparse.FileType('w'),
                                   default=sys.stdout,
                                   help='Output results to file with given name'
                                   )
-    arguments_parser.add_argument('--reporter',
-                                  choices=['console', 'junit'],
-                                  default='console',
-                                  help='Specify type of reporter to output'
+    arguments_parser.add_argument('--whitelist',
+                                  type=argparse.FileType('r'),
+                                  help='Whitelist file with rules to ignore certain files or dirs (.gitignore style)'
                                   )
     return arguments_parser.parse_args()

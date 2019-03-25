@@ -4,8 +4,8 @@ cmake-checker is a tool to search for violations to 'modern' cmake rules.
 ### Usage
 
 ```
-usage: cmake_checker.py [-h] [--warn-only] [-o OUTPUT_FILE]
-                        [--reporter {console,junit}]
+usage: cmake_checker.py [-h] [--warn-only] [--reporter {console,junit}]
+                        [-o OUTPUT_FILE] [--whitelist WHITELIST]
                         PATH [PATH ...]
 
 positional arguments:
@@ -15,10 +15,13 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --warn-only           Program will return 0 even if violations are found
-  -o OUTPUT_FILE, --output-file OUTPUT_FILE
-                        Output results to file with given name
   --reporter {console,junit}
                         Specify type of reporter to output
+  -o OUTPUT_FILE, --output-file OUTPUT_FILE
+                        Output results to file with given name
+  --whitelist WHITELIST
+                        Whitelist file with rules to ignore certain files or
+                        dirs (.gitignore style)
 ```
 
 ### What&Why tool warns about
