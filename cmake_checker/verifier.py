@@ -6,22 +6,10 @@ class Verifier(object):
     def __init__(self):
         self.lexer = Lexer()
 
-    def check_path(self, paths: list) -> list:
-        files_with_issues = list()
-
-        for path in paths:
-            files_with_issues = files_with_issues + self.__check_path(path)
-
-        return files_with_issues
-
-    def __check_path(self, path: Path) -> list:
-        if not path.is_dir():
-            return [(path, self.__validate_file(path))]
-
+    def check_path(self, files: list) -> list:
         files_with_issues = []
-        for file in self.__find_all_cmake_files(path):
-            files_with_issues.append((file, self.__validate_file(file)))
-
+        for file in files:
+            files_with_issues += [(file, self.__validate_file(file))]
         return files_with_issues
 
     def __validate_file(self, file: Path) -> list:
@@ -29,13 +17,4 @@ class Verifier(object):
             return self.__find_issues(cmake_file.read())
 
     def __find_issues(self, data: str) -> list:
-        issues = []
-
-        for issue in self.lexer.analyze(data):
-            issues.append((issue.type, issue.lineno))
-
-        return issues
-
-    @staticmethod
-    def __find_all_cmake_files(path: Path):
-        return sorted(path.glob('**/*.cmake')) + sorted(path.glob('**/CMakeLists.txt'))
+        return [(issue.type, issue.lineno) for issue in self.lexer.analyze(data)]
