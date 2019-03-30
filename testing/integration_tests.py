@@ -114,3 +114,14 @@ class IntegrationTests(TestCase):
         golden_master = Path('integration_tests/junit_goldenmaster/integration_dir.xml')
 
         self.assertEqual(golden_master.read_text(), output)
+
+    def test_should_whitelist_correctly_certain_files_when_whitelist_file_provided(self):
+        output = self.__run_cmake_checker_for_file(
+            'integration_tests/cmake-files-dir/',
+            'integration_tests/multiple_violations_in_single_line/',
+            '--whitelist',
+            'integration_tests/whitelist.txt'
+        )
+
+        self.assertNumberOfScannedFiles(2, output)
+        self.assertCheckerFoundNumberOfIssues(3, output)

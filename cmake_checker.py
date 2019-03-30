@@ -1,5 +1,6 @@
 import sys
 
+from cmake_checker.file_finder import provide_files_for_verification
 from cmake_checker.parse_arguments import parse_arguments
 from cmake_checker.verifier import Verifier
 from cmake_checker.reporter import Reporter
@@ -17,7 +18,8 @@ def main():
     arguments = parse_arguments()
     verify = Verifier()
 
-    files_with_info = verify.check_path(arguments.PATH)
+    files = provide_files_for_verification(arguments.PATH, arguments.whitelist)
+    files_with_info = verify.check_path(files)
     reporter = Reporter.create(arguments.reporter, files_with_info)
     arguments.output_file.write(reporter.generate_report())
 

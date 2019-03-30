@@ -1,9 +1,21 @@
 from pathlib import Path
 
 
+def provide_files_for_verification(paths: list, whitelist_content) -> list:
+    file_finder = FileFinder(whitelist_content)
+
+    file_list = []
+    for path in paths:
+        file_list += file_finder.get_all_cmake_files(path)
+    return file_list
+
+
 class FileFinder(object):
-    def __init__(self, whitelist=[]):
-        self.ignore_patterns = [line.rstrip('\n') for line in whitelist]
+    def __init__(self, whitelist=None):
+        if whitelist is None:
+            self.ignore_patterns = []
+        else:
+            self.ignore_patterns = [line.rstrip('\n') for line in whitelist]
 
     def get_all_cmake_files(self, path: Path) -> list:
         if not path.is_dir():
