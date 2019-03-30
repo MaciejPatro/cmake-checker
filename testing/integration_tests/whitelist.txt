@@ -1,0 +1,1 @@
+**/multiple_violations_in_single_line/**
