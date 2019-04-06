@@ -4,7 +4,7 @@ cmake-checker is a tool to search for violations to 'modern' cmake rules.
 ### Usage
 
 ```
-usage: cmake_checker.py [-h] [--warn-only] [--reporter {console,junit}]
+usage: __main__.py [-h] [--warn-only] [--reporter {console,junit}]
                         [-o OUTPUT_FILE] [--whitelist WHITELIST]
                         PATH [PATH ...]
 
