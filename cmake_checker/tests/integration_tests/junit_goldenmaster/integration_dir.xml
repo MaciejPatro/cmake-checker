@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <testsuites disabled="0" errors="0" failures="9" tests="9" time="0.0">
-	<testsuite disabled="0" errors="0" failures="2" name="integration_tests/cmake-files-dir/some_folder/script.cmake" skipped="0" tests="2" time="0">
+	<testsuite disabled="0" errors="0" failures="2" name="cmake_checker/tests/integration_tests/cmake-files-dir/some_folder/script.cmake" skipped="0" tests="2" time="0">
 		<testcase line="1" name="LINK_LIBRARIES">
 			<failure message="line:    1       LINK_LIBRARIES&gt; link_libraries(
 " type="failure"/>
@@ -10,13 +10,13 @@
 " type="failure"/>
 		</testcase>
 	</testsuite>
-	<testsuite disabled="0" errors="0" failures="1" name="integration_tests/cmake-files-dir/CMakeLists.txt" skipped="0" tests="1" time="0">
+	<testsuite disabled="0" errors="0" failures="1" name="cmake_checker/tests/integration_tests/cmake-files-dir/CMakeLists.txt" skipped="0" tests="1" time="0">
 		<testcase line="1" name="COMPILE_FLAGS">
 			<failure message="line:    1        COMPILE_FLAGS&gt; CMAKE_CXX_FLAGS
 " type="failure"/>
 		</testcase>
 	</testsuite>
-	<testsuite disabled="0" errors="0" failures="3" name="integration_tests/dir_with_file_glob_issue/CMakeLists.txt" skipped="0" tests="3" time="0">
+	<testsuite disabled="0" errors="0" failures="3" name="cmake_checker/tests/integration_tests/dir_with_file_glob_issue/CMakeLists.txt" skipped="0" tests="3" time="0">
 		<testcase line="2" name="FILE_GLOB">
 			<failure message="line:    2            FILE_GLOB&gt; file(GLOB is here 234)
 " type="failure"/>
@@ -30,8 +30,8 @@
 " type="failure"/>
 		</testcase>
 	</testsuite>
-	<testsuite disabled="0" errors="0" failures="0" name="integration_tests/empty_file/CMakeLists.txt" skipped="0" tests="0" time="0"/>
-	<testsuite disabled="0" errors="0" failures="3" name="integration_tests/multiple_violations_in_single_line/CMakeLists.txt" skipped="0" tests="3" time="0">
+	<testsuite disabled="0" errors="0" failures="0" name="cmake_checker/tests/integration_tests/empty_file/CMakeLists.txt" skipped="0" tests="0" time="0"/>
+	<testsuite disabled="0" errors="0" failures="3" name="cmake_checker/tests/integration_tests/multiple_violations_in_single_line/CMakeLists.txt" skipped="0" tests="3" time="0">
 		<testcase line="5" name="ADD_COMPILE_OPTIONS">
 			<failure message="line:    5  ADD_COMPILE_OPTIONS&gt; add_compile_options() CMAKE_CXX_FLAGS include_directories()
 " type="failure"/>

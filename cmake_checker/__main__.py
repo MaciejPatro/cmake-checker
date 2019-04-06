@@ -1,9 +1,9 @@
 import sys
 
-from cmake_checker.file_finder import provide_files_for_verification
-from cmake_checker.parse_arguments import parse_arguments
-from cmake_checker.verifier import Verifier
-from cmake_checker.reporter import Reporter
+from cmake_checker.components.file_finder import provide_files_for_verification
+from cmake_checker.components.parse_arguments import parse_arguments
+from cmake_checker.components.verifier import Verifier
+from cmake_checker.components.reporter import Reporter
 
 
 def compute_exit_code(violations: list, warn_only: bool) -> int:

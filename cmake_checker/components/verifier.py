@@ -1,5 +1,5 @@
 from pathlib import Path
-from cmake_checker.lexer import Lexer
+from .lexer import Lexer
 
 
 class Verifier(object):

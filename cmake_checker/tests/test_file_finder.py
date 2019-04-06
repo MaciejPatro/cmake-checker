@@ -1,11 +1,11 @@
 from unittest import TestCase
 from pathlib import Path
 
-from cmake_checker.file_finder import FileFinder
+from cmake_checker.components.file_finder import FileFinder
 
 
 class TestFileFinder(TestCase):
-    PATH = Path('../testing/integration_tests')
+    PATH = Path('cmake_checker/tests/integration_tests')
 
     def test_should_list_all_files_when_no_whitelist_provided(self):
         file_finder = FileFinder()
