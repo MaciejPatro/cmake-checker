@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='cmake_checker',
-    version='0.1.1',
+    version='0.1.3',
     author='Maciej Patro',
     author_email='maciejpatro@gmail.com',
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
