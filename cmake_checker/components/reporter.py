@@ -85,14 +85,20 @@ class JUnitReporter(Reporter):
         return TestSuite(file__with_info[0], test_case_list)
 
     def __create_test_cases(self, file: Path, violations: list) -> list:
-        test_cases = []
         with file.open() as cmake_file:
             line_reader = LineReader(cmake_file)
 
-            for (violation, line_number) in violations:
-                test_case = TestCase(name=violation, line=line_number)
-                test_case.add_failure_info(message=self.__generate_failure_info(line_number, violation, line_reader))
-                test_cases.append(test_case)
+            if violations:
+                return self.__generate_failed_tests_list(violations, line_reader)
+            else:
+                return [TestCase(name='No violations found')]
+
+    def __generate_failed_tests_list(self, violations: list, line_reader: LineReader) -> list:
+        test_cases = []
+        for (violation, line_number) in violations:
+            test_case = TestCase(name=violation, line=line_number)
+            test_case.add_failure_info(message=self.__generate_failure_info(line_number, violation, line_reader))
+            test_cases.append(test_case)
         return test_cases
 
     @staticmethod

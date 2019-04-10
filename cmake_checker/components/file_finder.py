@@ -1,4 +1,5 @@
 from pathlib import Path
+from pathspec import PathSpec
 
 
 def provide_files_for_verification(paths: list, whitelist_content) -> list:
@@ -13,9 +14,8 @@ def provide_files_for_verification(paths: list, whitelist_content) -> list:
 class FileFinder(object):
     def __init__(self, whitelist=None):
         if whitelist is None:
-            self.ignore_patterns = []
-        else:
-            self.ignore_patterns = [line.rstrip('\n') for line in whitelist]
+            whitelist = []
+        self.ignore_spec = PathSpec.from_lines('gitwildmatch', whitelist)
 
     def get_all_cmake_files(self, path: Path) -> list:
         if not path.is_dir():
@@ -27,4 +27,4 @@ class FileFinder(object):
         return [file for file in all_cmake_files if not self.__is_on_whitelist(file)]
 
     def __is_on_whitelist(self, file: Path) -> bool:
-        return any(file.match(path_pattern) for path_pattern in self.ignore_patterns)
+        return self.ignore_spec.match_file(str(file))
